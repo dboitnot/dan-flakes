@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./local.nix
     ];
 
   # Bootloader.
@@ -110,7 +111,7 @@
   users.users.dboitnot = {
     isNormalUser = true;
     description = "Dan Boitnott";
-	extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" ];
+	  extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" "dialout" ];
     packages = with pkgs; [
       # vim
     ];
@@ -174,18 +175,6 @@
 #      # Required for containers under podman-compose to be able to talk to each other.
 #      defaultNetwork.settings.dns_enabled = true;
 #    };
-
-    oci-containers.containers.jellyfin = {
-      autoStart = true;
-      image = "jellyfin/jellyfin";
-      ports = [ "8096:8096" ];
-      user = "1000:1000";
-      volumes = [
-        "/home/dboitnot/custom/jellyfin/config:/config"
-	"/home/dboitnot/custom/jellyfin/cache:/cache"
-	"/mnt/video:/media"
-      ];
-    };
 
     virtualbox.host = {
       enable = true;

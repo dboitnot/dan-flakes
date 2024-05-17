@@ -1,10 +1,13 @@
 { config, pkgs, lib, ... }:
 
 let
+  fs = lib.fileset;
   confDPath = ~/.config/home-manager/conf.d;
   confDFiles = builtins.filter (f: builtins.match ".*\\.nix" f != null) (builtins.attrNames (builtins.readDir confDPath));
   importedConfs = map (f: import (confDPath + "/${f}")) confDFiles;
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+
+  ssmProxyScript = ./ssm-ssh-proxy.sh;
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -235,6 +238,29 @@ in
     # enableFishIntegration = true;
   };
 
+  programs.ssh = {
+    enable = true;
+    # addKeysToAgent = true;
+    forwardAgent = true;
+    extraConfig = ''
+      HostKeyAlgorithms +ssh-rsa
+      PubkeyAcceptedKeyTypes +ssh-rsa'';
+    matchBlocks = {
+      "*.sig" = {
+        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r sig -f 1 -h %h -p %p -v -R us-east-1";
+      };
+    };
+  };
+
+  home.file.ssh-ssh-proxy = {
+    executable = true;
+    source = ./ssm-ssh-proxy.sh;
+    target = ".ssh/ssm-ssh-proxy.sh.link";
+
+    # SSH doesn't like this file to be a symlink so we'll "realize" it.
+    onChange = "cp -f .ssh/ssm-ssh-proxy.sh.link .ssh/ssm-ssh-proxy.sh";
+  };
+
   # tealdeer is a command line client for tldr-pages. To use it, run:
   #   $ tldr <command>
   programs.tealdeer = {
@@ -262,6 +288,8 @@ in
     enable = true;
     enableBashIntegration = true;
   };
+
+  programs.yt-dlp.enable = true;
 
   services.ssh-agent.enable = true;
 
