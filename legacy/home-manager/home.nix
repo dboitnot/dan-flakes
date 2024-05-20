@@ -1,14 +1,15 @@
-{
-  pkgs,
-  lib,
-  ...
-}: let
+{ pkgs
+, lib
+, ...
+}:
+let
   # fs = lib.fileset;
   confDPath = ~/.config/home-manager/conf.d;
   confDFiles = builtins.filter (f: builtins.match ".*\\.nix" f != null) (builtins.attrNames (builtins.readDir confDPath));
   importedConfs = map (f: import (confDPath + "/${f}")) confDFiles;
-  unstable = import <nixos-unstable> {config = {allowUnfree = true;};};
-in {
+  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
+in
+{
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home = {
@@ -18,7 +19,7 @@ in {
 
   nix = {
     package = pkgs.nix;
-    settings.experimental-features = ["nix-command" "flakes"];
+    settings.experimental-features = [ "nix-command" "flakes" ];
   };
 
   # This value determines the Home Manager release that your configuration is
@@ -131,7 +132,7 @@ in {
       search_mode = "skim";
       show_preview = true;
     };
-    flags = ["--disable-up-arrow"];
+    flags = [ "--disable-up-arrow" ];
     enableBashIntegration = true;
     # enableFishIntegration = true;
     enableNushellIntegration = true;
@@ -143,7 +144,7 @@ in {
 
   programs.bash = {
     enable = true;
-    historyControl = ["erasedups"];
+    historyControl = [ "erasedups" ];
     shellAliases = {
       ssh = "f(){ echo $TERM |grep -qi kitty && kitty +kitten ssh $* || ssh $*; unset -f f; }; f";
       top = "btm";

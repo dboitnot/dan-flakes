@@ -8,9 +8,9 @@
     ports = [ "8096:8096" ];
     user = "1000:1000";
     volumes = [
-        "/home/dboitnot/custom/jellyfin/config:/config"
-        "/home/dboitnot/custom/jellyfin/cache:/cache"
-        "/mnt/video:/media"
+      "/home/dboitnot/custom/jellyfin/config:/config"
+      "/home/dboitnot/custom/jellyfin/cache:/cache"
+      "/mnt/video:/media"
     ];
   };
 }

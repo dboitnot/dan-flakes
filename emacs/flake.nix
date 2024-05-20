@@ -9,7 +9,7 @@
     {
       devShell = pkgs.mkShell {
         buildInputs = with pkgs.emacsPackages; [
-	  evil
+          evil
         ];
       };
     }

@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./local.nix
     ];
@@ -16,7 +17,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking.hostName = "zaphod"; # Define your hostname.
-  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true; # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -63,23 +64,23 @@
     windowManager.i3.enable = true;
   };
 
-#  # Enable the X11 windowing system.
-#  services.xserver.enable = true;
-#
-#  # Enable the XFCE Desktop Environment.
-#  services.xserver.displayManager.defaultSession = "xfce";
-#  services.xserver.displayManager.lightdm.enable = true;
-#  services.xserver.desktopManager.xfce.enable = true;
-#
-#  # Add i3wm
-#  programs.i3lock.enable = true;
-#  services.xserver.windowManager.i3.enable = true;
-#
-#  # Configure keymap in X11
-#  services.xserver = {
-#    layout = "us";
-#    xkbVariant = "";
-#  };
+  #  # Enable the X11 windowing system.
+  #  services.xserver.enable = true;
+  #
+  #  # Enable the XFCE Desktop Environment.
+  #  services.xserver.displayManager.defaultSession = "xfce";
+  #  services.xserver.displayManager.lightdm.enable = true;
+  #  services.xserver.desktopManager.xfce.enable = true;
+  #
+  #  # Add i3wm
+  #  programs.i3lock.enable = true;
+  #  services.xserver.windowManager.i3.enable = true;
+  #
+  #  # Configure keymap in X11
+  #  services.xserver = {
+  #    layout = "us";
+  #    xkbVariant = "";
+  #  };
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -111,7 +112,7 @@
   users.users.dboitnot = {
     isNormalUser = true;
     description = "Dan Boitnott";
-	  extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" "dialout" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" "dialout" ];
     packages = with pkgs; [
       # vim
     ];
@@ -121,9 +122,11 @@
     device = "//192.168.1.250/video";
     fsType = "cifs";
 
-    options = let
-      automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
-      in ["${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100"];
+    options =
+      let
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s,user,users";
+      in
+      [ "${automount_opts},credentials=/etc/nixos/smb-secrets,uid=1000,gid=100" ];
   };
 
   # Install firefox.
@@ -144,16 +147,19 @@
   environment.systemPackages = with pkgs; [
     nix-index
 
-    wget nmap
+    wget
+    nmap
 
     dive # look into docker image layers
     # podman-tui # status of containers in the terminal
     docker-compose # start group of containers for dev
     # podman-compose # start group of containers for dev
 
-    cifs-utils stilo-themes
+    cifs-utils
+    stilo-themes
 
-    vlc xorg.xkill
+    vlc
+    xorg.xkill
 
     xfce.thunar-volman
 
@@ -167,16 +173,16 @@
       enable = true;
     };
 
-#    podman = {
-#      enable = true;
-#
-#      # Create a `docker` alias for podman, to use it as a drop-in replacement
-#      dockerCompat = true;
-#      dockerSocket.enable = true;
-#
-#      # Required for containers under podman-compose to be able to talk to each other.
-#      defaultNetwork.settings.dns_enabled = true;
-#    };
+    #    podman = {
+    #      enable = true;
+    #
+    #      # Create a `docker` alias for podman, to use it as a drop-in replacement
+    #      dockerCompat = true;
+    #      dockerSocket.enable = true;
+    #
+    #      # Required for containers under podman-compose to be able to talk to each other.
+    #      defaultNetwork.settings.dns_enabled = true;
+    #    };
 
     virtualbox.host = {
       enable = true;

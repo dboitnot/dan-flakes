@@ -42,7 +42,7 @@
 # | 57554   | \ue0d2  |      |
 # | 57556   | \ue0d4  |      |
 
-{lib, ...}:
+{ lib, ... }:
 {
   programs.starship = {
     enable = true;
@@ -140,7 +140,7 @@
       env_var = {
         AWS_PROFILE = {
           symbol = "☁️";
-          style= "bg:#7035b8";
+          style = "bg:#7035b8";
           format = "[$symbol$env_value]($style)";
         };
       };
