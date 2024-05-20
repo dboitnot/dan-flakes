@@ -1,23 +1,24 @@
-{ config, pkgs, lib, ... }:
-
-let
-  fs = lib.fileset;
+{
+  pkgs,
+  lib,
+  ...
+}: let
+  # fs = lib.fileset;
   confDPath = ~/.config/home-manager/conf.d;
   confDFiles = builtins.filter (f: builtins.match ".*\\.nix" f != null) (builtins.attrNames (builtins.readDir confDPath));
   importedConfs = map (f: import (confDPath + "/${f}")) confDFiles;
-  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
-
-  ssmProxyScript = ./ssm-ssh-proxy.sh;
-in
-{
+  unstable = import <nixos-unstable> {config = {allowUnfree = true;};};
+in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
-  home.username = "dboitnot";
-  home.homeDirectory = "/home/dboitnot";
+  home = {
+    username = "dboitnot";
+    homeDirectory = "/home/dboitnot";
+  };
 
   nix = {
     package = pkgs.nix;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = ["nix-command" "flakes"];
   };
 
   # This value determines the Home Manager release that your configuration is
@@ -34,20 +35,42 @@ in
   home.packages = [
     # General
 
-    pkgs.ripgrep pkgs.fd pkgs.fira-code pkgs.powerline-symbols
-    pkgs.stow pkgs.dnsutils pkgs.jq pkgs.hunspellDicts.en_US-large
-    pkgs.just pkgs.niv pkgs.bottom pkgs.tmux pkgs.delta
+    pkgs.ripgrep
+    pkgs.fd
+    pkgs.fira-code
+    pkgs.powerline-symbols
+    pkgs.stow
+    pkgs.dnsutils
+    pkgs.jq
+    pkgs.hunspellDicts.en_US-large
+    pkgs.just
+    pkgs.niv
+    pkgs.bottom
+    pkgs.tmux
+    pkgs.delta
+    pkgs.pre-commit
 
     # Development tools for emacs
-    pkgs.cmake pkgs.clang pkgs.gnumake pkgs.terraform pkgs.irony-server
-    pkgs.rustup pkgs.ansible pkgs.black pkgs.clojure-lsp pkgs.semgrep
-    pkgs.hunspell 
+    pkgs.cmake
+    pkgs.clang
+    pkgs.gnumake
+    pkgs.terraform
+    pkgs.irony-server
+    pkgs.rustup
+    pkgs.ansible
+    pkgs.black
+    pkgs.clojure-lsp
+    pkgs.semgrep
+    pkgs.hunspell
 
     # Language Support
-    pkgs.pipenv pkgs.nodejs_21
+    pkgs.pipenv
+    pkgs.nodejs_21
 
     # AWS
-    pkgs.awscli2 pkgs.cw pkgs.ssm-session-manager-plugin
+    pkgs.awscli2
+    pkgs.cw
+    pkgs.ssm-session-manager-plugin
 
     # Probably better way to do these but I don't have time right now.
     pkgs.nushellFull
@@ -92,7 +115,7 @@ in
   #  /etc/profiles/per-user/dboitnot/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-    # EDITOR = "vim";
+    # EDITOR = "nvim";
     AWS_CLI_AUTO_PROMPT = "on-partial";
   };
 
@@ -124,9 +147,10 @@ in
     shellAliases = {
       ssh = "f(){ echo $TERM |grep -qi kitty && kitty +kitten ssh $* || ssh $*; unset -f f; }; f";
       top = "btm";
-      emacs = "doom run";
+      # emacs = "doom run";
       nix-search = "docker run --rm -it ghcr.io/peterldowns/nix-search-cli:latest";
       diff = "delta";
+      vi = "nvim";
     };
     initExtra = "eval $(thefuck --alias drat)";
   };
@@ -145,14 +169,13 @@ in
   programs.chromium.enable = true;
   programs.command-not-found.enable = true;
 
-
   # "Better cat"
   programs.bat.enable = true;
 
   # direnv is a tool to load/unload environment variables based on the current
   # directory.
   programs.direnv = {
-    enable = true; 
+    enable = true;
     enableBashIntegration = true;
     enableNushellIntegration = true;
     # enableFishIntegration = true;
@@ -213,23 +236,6 @@ in
       # Bright red
       color10 = "#23fd00";
     };
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-    withPython3 = true;
-    plugins = with pkgs.vimPlugins; [
-      nvim-lspconfig
-      nvim-treesitter.withAllGrammars
-      plenary-nvim
-      gruvbox-material
-      mini-nvim
-    ];
-    coc.enable = true;
   };
 
   programs.pyenv = {
@@ -298,18 +304,18 @@ in
     config = {
       modifier = "Mod4";
       focus.mouseWarping = false;
-      
+
       keybindings = lib.mkOptionDefault {
         # Manually lock screen
         "Mod4+shift+x" = "exec i3lock --color '#000000'";
 
-	      # change focus
+        # change focus
         "Mod4+h" = "focus left";
         "Mod4+j" = "focus down";
         "Mod4+k" = "focus up";
         "Mod4+l" = "focus right";
-	
-	      # move focused window
+
+        # move focused window
         "Mod4+Shift+h" = "move left";
         "Mod4+Shift+j" = "move down";
         "Mod4+Shift+k" = "move up";

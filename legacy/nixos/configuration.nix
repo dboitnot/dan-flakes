@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
   imports =
@@ -15,8 +15,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "zaphod"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # networking.hostName = "zaphod"; # Define your hostname.
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -50,7 +50,7 @@
   };
 
   services.xserver = {
-    enable = true;   
+    enable = true;
     desktopManager = {
       xterm.enable = false;
       xfce = {
@@ -59,7 +59,7 @@
         enableXfwm = false;
       };
     };
-    displayManager.defaultSession = "xfce";
+    displayManager.defaultSession = "xfce+i3";
     windowManager.i3.enable = true;
   };
 
@@ -67,7 +67,7 @@
 #  services.xserver.enable = true;
 #
 #  # Enable the XFCE Desktop Environment.
-#  services.xserver.displayManager.defaultSession = "xfce"; 
+#  services.xserver.displayManager.defaultSession = "xfce";
 #  services.xserver.displayManager.lightdm.enable = true;
 #  services.xserver.desktopManager.xfce.enable = true;
 #
@@ -80,7 +80,7 @@
 #    layout = "us";
 #    xkbVariant = "";
 #  };
- 
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
@@ -144,8 +144,8 @@
   environment.systemPackages = with pkgs; [
     nix-index
 
-    vim wget nmap
-     
+    wget nmap
+
     dive # look into docker image layers
     # podman-tui # status of containers in the terminal
     docker-compose # start group of containers for dev
@@ -156,6 +156,8 @@
     vlc xorg.xkill
 
     xfce.thunar-volman
+
+    inputs.neovim-flake.packages."${pkgs.system}".maximal
   ];
 
   # Enable common container config files in /etc/containers

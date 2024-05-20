@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
+  networking.hostName = "zaphod";
   virtualisation.oci-containers.containers.jellyfin = {
     autoStart = true;
     image = "jellyfin/jellyfin:10.9.1";

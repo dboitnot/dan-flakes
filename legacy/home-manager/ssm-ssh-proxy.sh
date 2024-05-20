@@ -42,7 +42,7 @@ while :; do
 
         -p | --port)
             INST_PORT="$arg"; shift
-            ;;          
+            ;;
 
         -f | --host_field)
             HOST_FIELD="$arg"; shift
@@ -77,7 +77,7 @@ if [ -n "$HOST_FIELD" ]; then
 fi
 
 for AWS_DEFAULT_REGION in $ALL_REGIONS; do
-    export AWS_DEFAULT_REGION        
+    export AWS_DEFAULT_REGION
     inst_id=$(get_inst_id_cur_region "$INST_NAME")
     if [ -n "$inst_id" ]; then
         debug "Connecting to instance $inst_id in region $AWS_DEFAULT_REGION via SSM..."
