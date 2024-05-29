@@ -1,15 +1,14 @@
-{ pkgs
-, lib
-, ...
-}:
-let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   # fs = lib.fileset;
   confDPath = ~/.config/home-manager/conf.d;
   confDFiles = builtins.filter (f: builtins.match ".*\\.nix" f != null) (builtins.attrNames (builtins.readDir confDPath));
   importedConfs = map (f: import (confDPath + "/${f}")) confDFiles;
-  unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
-in
-{
+  unstable = import <nixos-unstable> {config = {allowUnfree = true;};};
+in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home = {
@@ -19,7 +18,7 @@ in
 
   nix = {
     package = pkgs.nix;
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = ["nix-command" "flakes"];
   };
 
   # This value determines the Home Manager release that your configuration is
@@ -50,6 +49,8 @@ in
     pkgs.tmux
     pkgs.delta
     pkgs.pre-commit
+    pkgs.unzip
+    pkgs.neovide
 
     # Development tools for emacs
     pkgs.cmake
@@ -65,6 +66,7 @@ in
     pkgs.hunspell
 
     # Language Support
+    pkgs.python3
     pkgs.pipenv
     pkgs.nodejs_21
 
@@ -78,13 +80,18 @@ in
     pkgs.vagrant
     # pkgs.virtualboxWithExtpack
 
+    # Media Production
+    pkgs.libsForQt5.kdenlive
+
     unstable.logseq
     unstable.brave
     #unstable.zoom-us
     unstable.slack
+    unstable.discord
 
     pkgs.zoom-us
     pkgs.teams-for-linux
+    pkgs.yubioath-flutter
 
     pkgs.pulseaudio
   ];
@@ -132,7 +139,7 @@ in
       search_mode = "skim";
       show_preview = true;
     };
-    flags = [ "--disable-up-arrow" ];
+    flags = ["--disable-up-arrow"];
     enableBashIntegration = true;
     # enableFishIntegration = true;
     enableNushellIntegration = true;
@@ -144,7 +151,7 @@ in
 
   programs.bash = {
     enable = true;
-    historyControl = [ "erasedups" ];
+    historyControl = ["erasedups"];
     shellAliases = {
       ssh = "f(){ echo $TERM |grep -qi kitty && kitty +kitten ssh $* || ssh $*; unset -f f; }; f";
       top = "btm";
@@ -239,6 +246,8 @@ in
     };
   };
 
+  programs.obs-studio.enable = true;
+
   programs.pyenv = {
     enable = true;
     enableBashIntegration = true;
@@ -255,6 +264,12 @@ in
     matchBlocks = {
       "*.sig" = {
         proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r sig -f 1 -h %h -p %p -v -R us-east-1";
+      };
+      "*.principia" = {
+        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r principia -f 1 -h %h -p %p -v -R us-east-2";
+      };
+      "*.xula" = {
+        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r xula -f 1 -h %h -p %p -v -R us-east-2";
       };
     };
   };
@@ -276,6 +291,11 @@ in
       display.compact = false;
       updates.auto_update = true;
     };
+  };
+
+  programs.taskwarrior = {
+    enable = true;
+    colorTheme = "dark-blue-256";
   };
 
   programs.thefuck = {

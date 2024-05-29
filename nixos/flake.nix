@@ -8,12 +8,22 @@
 
   outputs = { self, nixpkgs, ... }@inputs:
     {
-      nixosConfigurations.dent = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          { _module.args = { inherit inputs; }; }
-        ];
+      nixosConfigurations = {
+        dent = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./configuration.nix
+            { _module.args = { inherit inputs; }; }
+          ];
+        };
+
+        zaphod = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./configuration.nix
+            { _module.args = { inherit inputs; }; }
+          ];
+        };
       };
     };
 }

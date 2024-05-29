@@ -50,6 +50,8 @@
     package = lib.mkForce pkgs.gnome3.gvfs;
   };
 
+  services.pcscd.enable = true;
+
   services.xserver = {
     enable = true;
     desktopManager = {
@@ -154,6 +156,7 @@
     # podman-tui # status of containers in the terminal
     docker-compose # start group of containers for dev
     # podman-compose # start group of containers for dev
+    taskwarrior
 
     cifs-utils
     stilo-themes
