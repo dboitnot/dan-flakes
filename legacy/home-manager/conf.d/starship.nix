@@ -66,6 +66,7 @@
         "$rust"
         "[](fg:#3453c2 bg:#356eb8)"
         "$time"
+        "$custom"
         "$character"
       ];
 
@@ -144,6 +145,13 @@
           format = "[$symbol$env_value]($style)";
         };
       };
+
+      # custom.tasks = {
+      #   symbol = "- ";
+      #   command = "echo hi";
+      #   # command = "task count rc.gc=off rc.verbose=nothing status:pending";
+      #   # when = "which task";
+      # };
     };
   };
 }

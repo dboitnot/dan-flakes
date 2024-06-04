@@ -262,11 +262,14 @@ in {
       HostKeyAlgorithms +ssh-rsa
       PubkeyAcceptedKeyTypes +ssh-rsa'';
     matchBlocks = {
-      "*.sig" = {
-        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r sig -f 1 -h %h -p %p -v -R us-east-1";
+      "*.cbu" = {
+        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r cbu -f 1 -h %h -p %p -v -R us-west-2";
       };
       "*.principia" = {
         proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r principia -f 1 -h %h -p %p -v -R us-east-2";
+      };
+      "*.sig" = {
+        proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r sig -f 1 -h %h -p %p -v -R us-east-1";
       };
       "*.xula" = {
         proxyCommand = "~/.ssh/ssm-ssh-proxy.sh -r xula -f 1 -h %h -p %p -v -R us-east-2";
