@@ -52,6 +52,10 @@
 
   services.pcscd.enable = true;
 
+  services.tailscale = {
+    enable = true;
+  };
+
   services.xserver = {
     enable = true;
     desktopManager = {
@@ -114,7 +118,7 @@
   users.users.dboitnot = {
     isNormalUser = true;
     description = "Dan Boitnott";
-    extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" "dialout" ];
+    extraGroups = [ "networkmanager" "wheel" "audio" "uucp" "plugdev" "docker" "vboxusers" "dialout" "disk" "floppy" "lp" "cdrom" "tape" "video" ];
     packages = with pkgs; [
       # vim
     ];

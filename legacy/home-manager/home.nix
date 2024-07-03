@@ -88,6 +88,7 @@ in {
     #unstable.zoom-us
     unstable.slack
     unstable.discord
+    unstable.devenv
 
     pkgs.zoom-us
     pkgs.teams-for-linux
